@@ -1,0 +1,100 @@
+name: Build OniGame v0.13.0
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Find Maven project
+        id: project
+        shell: bash
+        run: |
+          POM_PATH="$(find . -name pom.xml -type f -not -path '*/target/*' | head -n 1)"
+          if [ -z "$POM_PATH" ]; then
+            echo "::error::pom.xmlが見つかりません。ソースZIPを展開してアップロードしてください。"
+            exit 1
+          fi
+          PROJECT_DIR="$(realpath "$(dirname "$POM_PATH")")"
+          echo "directory=$PROJECT_DIR" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Build plugin
+        working-directory: ${{ steps.project.outputs.directory }}
+        run: mvn --batch-mode --update-snapshots clean package
+
+      - name: Find plugin JAR
+        id: plugin
+        shell: bash
+        run: |
+          JAR_PATH="$(find '${{ steps.project.outputs.directory }}/target' -maxdepth 1 -name 'OniGame-*.jar' -type f | head -n 1)"
+          if [ -z "$JAR_PATH" ]; then
+            echo "::error::OniGameのJARが生成されませんでした。"
+            exit 1
+          fi
+          echo "path=$(realpath "$JAR_PATH")" >> "$GITHUB_OUTPUT"
+
+      - name: Build OniGame resource pack
+        id: resource_pack
+        shell: bash
+        run: |
+          RESOURCE_DIR="${{ steps.project.outputs.directory }}/resourcepack"
+          OUTPUT_FILE="$GITHUB_WORKSPACE/OniGame-ResourcePack-v9.zip"
+          for REQUIRED in \
+            "$RESOURCE_DIR/pack.mcmeta" \
+            "$RESOURCE_DIR/assets/minecraft/textures/models/armor/chainmail_layer_1.png" \
+            "$RESOURCE_DIR/assets/minecraft/textures/models/armor/chainmail_layer_2.png" \
+            "$RESOURCE_DIR/assets/minecraft/models/item/player_head.json" \
+            "$RESOURCE_DIR/assets/onigame/models/item/arikawafuka.json" \
+            "$RESOURCE_DIR/assets/onigame/textures/item/arikawafuka.png" \
+            "$RESOURCE_DIR/assets/onigame/models/item/igami.json" \
+            "$RESOURCE_DIR/assets/onigame/textures/item/igami.png" \
+            "$RESOURCE_DIR/assets/onigame/models/item/azanami.json" \
+            "$RESOURCE_DIR/assets/onigame/textures/item/azanami.png" \
+            "$RESOURCE_DIR/assets/onigame/models/item/azanamiren.json" \
+            "$RESOURCE_DIR/assets/onigame/textures/item/azanamiren.png" \
+            "$RESOURCE_DIR/assets/onigame/models/item/sakuranatumi.json" \
+            "$RESOURCE_DIR/assets/onigame/textures/item/sakuranatumi.png" \
+            "$RESOURCE_DIR/assets/onigame/models/item/akasakahiiro.json" \
+            "$RESOURCE_DIR/assets/onigame/textures/item/akasakahiiro.png" \
+            "$RESOURCE_DIR/assets/onigame/font/title.json" \
+            "$RESOURCE_DIR/assets/onigame/textures/font/title.png" \
+            "$RESOURCE_DIR/assets/onigame/sounds.json" \
+            "$RESOURCE_DIR/assets/onigame/sounds/music/final_phase.ogg"
+          do
+            if [ ! -f "$REQUIRED" ]; then
+              echo "::error::必要なファイルが見つかりません: $REQUIRED"
+              exit 1
+            fi
+          done
+          rm -f "$OUTPUT_FILE"
+          (cd "$RESOURCE_DIR" && zip -r "$OUTPUT_FILE" pack.mcmeta assets)
+          unzip -t "$OUTPUT_FILE"
+          echo "path=$OUTPUT_FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Upload OniGame plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: OniGame-Paper-1.20.1-v0.13.0
+          path: ${{ steps.plugin.outputs.path }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload OniGame resource pack
+        uses: actions/upload-artifact@v4
+        with:
+          name: OniGame-ResourcePack-v9
+          path: ${{ steps.resource_pack.outputs.path }}
+          if-no-files-found: error
+          retention-days: 30
