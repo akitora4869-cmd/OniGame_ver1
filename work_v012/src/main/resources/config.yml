@@ -1,0 +1,201 @@
+minimum-players: 2
+game-seconds: 1200
+start-title:
+  # リソースパックv9の「鬼げぇむ」ロゴをゲーム開始時に表示します。
+  enabled: true
+  fade-in-ticks: 10
+  stay-ticks: 50
+  fade-out-ticks: 20
+heart-material: CRYING_OBSIDIAN
+heart-max-health: 100
+heart-progress-per-interval: 1
+heart-progress-interval-ticks: 10
+passive-skills:
+  # 「強靭」装備時の最大体力（体力2.0でハート1個）。
+  durability-max-health: 30
+  # 「退魔」の心臓損壊進行倍率。1.15で通常より15%高速になります。
+  exorcism-heart-progress-multiplier: 1.15
+  # 「臆病」発動中の基礎歩行速度。0.58でスニーク実効速度が通常歩行より少し遅くなります。
+  cowardice-sneak-walk-speed: 0.58
+  # 「忍びの血統」の常時歩行速度。鬼の標準0.24より少し遅い0.23です。
+  ninja-blood-walk-speed: 0.23
+  # 「跳躍」はスペース2回押しで前方へ跳びます。
+  leap-cooldown-seconds: 10
+  leap-forward-velocity: 1.25
+  leap-upward-velocity: 0.85
+heart-alert-cooldown-seconds: 5.0
+skill-check-min-seconds: 4.0
+skill-check-max-seconds: 9.0
+skill-check-duration-seconds: 2.4
+skill-check-success-window-seconds: 0.40
+# 中央の金色判定。通常成功より狭い代わりに進行ボーナスが大きくなります。
+skill-check-great-window-seconds: 0.12
+skill-check-success-bonus: 3
+skill-check-great-bonus: 7
+skill-check-failure-penalty: 8
+heart-placement-mode: random
+random-heart-count: 5
+heart-marker-name: "鬼の心臓地点"
+exit-radius: 3.0
+friendly-fire: false
+player-walk-speed: 0.20
+oni-walk-speed: 0.24
+oni-heart-protection:
+  # 心臓が1個以上残っている間、受けるダメージを25%にします。
+  damage-taken-multiplier: 0.25
+  # 1秒あたりの自動回復量（体力1.0 = ハート半個）。
+  regeneration-per-second: 1.0
+oni-passive-skills:
+  # 「渇望」は追跡継続5秒ごとに加速し、標準では最大Speed IIです。
+  craving-step-seconds: 5
+  craving-max-amplifier: 1
+  # 「血嗅」は最大体力70%以下の獲物を10秒ごとに2秒間発光させます。
+  blood-scent-interval-seconds: 10
+  blood-scent-health-ratio: 0.70
+  blood-scent-glow-ticks: 40
+  # 「守護」は心臓損壊通知の間隔を半分にします。
+  guardian-alert-interval-multiplier: 0.50
+  # 「捕食」は各獲物が初めて瀕死になった時にスタミナを回復します。
+  predation-stamina-recovery: 6.0
+  # 「妨害」は成功判定幅を30%狭め、通常成功時に損壊進行を2後退させます。
+  interference-window-multiplier: 0.70
+  interference-normal-regression: 2
+  interference-bot-success-multiplier: 0.80
+stamina:
+  # 満腹度20をスタミナ最大値として使用します。
+  drain-per-second: 2.0
+  recovery-per-second: 1.5
+  sneak-recovery-per-second: 2.5
+  # 走りながらジャンプした瞬間に追加消費します。
+  dash-jump-cost: 5.0
+  dash-jump-slow-ticks: 20
+auto-step:
+  # 鬼・ぷれいやーがジャンプせず1ブロック段差を登れます。
+  enabled: true
+  probe-distance: 0.45
+healing:
+  skill-duration-seconds: 5.0
+  skill-amount: 8.0
+  item-duration-seconds: 8.0
+  item-amount: 5.0
+  move-tolerance: 0.45
+  # パッシブ「絆」の共有回復。1.0なら治療した本人と同じ量を回復します。
+  bond-radius: 6.0
+  bond-shared-heal-multiplier: 1.0
+skills:
+  # 疾走: 5秒間の速度上昇III（Potion amplifier 2）
+  sprint-duration-ticks: 100
+  sprint-amplifier: 2
+  # 安定着地: 落下ダメージ無効後、4秒間の速度上昇III
+  safe-landing-speed-ticks: 80
+  safe-landing-speed-amplifier: 2
+  # メインスキル「執念」で自分と鬼が発光する秒数。
+  obsession-glow-seconds: 8
+dakko-skills:
+  fox-fire:
+    cooldown-seconds: 30
+    radius: 7.0
+    fixed-damage: 5.0
+    fire-ticks: 100
+    lock-after-broken-hearts: 3
+  heavenly-arrival:
+    cooldown-seconds: 35
+    target-range: 24
+    launch-height: 10.0
+    impact-radius: 5.0
+    impact-damage: 7.0
+    lock-after-broken-hearts: 4
+random-loot-chest-count: 5
+test-arena:
+  # 参加者0人で開始したテストプレイ専用。コマンド実行地点を中心にした正方形です。
+  size: 200
+  heart-count: 5
+  loot-chest-count: 5
+exit-beacon:
+  # 全心臓破壊後、脱出地点から空へビーコン風の光柱を表示します。
+  enabled: true
+  height: 48
+  particle-step: 1.0
+  dust-size: 1.2
+loot-chests:
+  open-seconds: 5.0
+  move-tolerance: 0.55
+  min-items: 1
+  max-items: 3
+  max-carried-items: 3
+bot:
+  movement-speed: 0.32
+  attack-damage: 7.0
+  # 鬼Botが同じZombie系エンティティのぷれいやーBotも確実に追跡・攻撃する補助制御
+  player-bot-chase-velocity: 0.28
+  player-bot-attack-range: 2.5
+  player-bot-attack-cooldown-ticks: 20
+  rest-seconds: 3.0
+  dakko-heavenly-min-range: 8.0
+  dakko-heavenly-max-range: 24.0
+  dakko-heavenly-windup-ticks: 12
+player-bot:
+  # 鬼側Bot戦の標準人数。ぷれいやー側ソロテストはGM本人＋味方Bot4体です。
+  default-count: 5
+  solo-player-test-teammates: 4
+  # Paperの経路探索で使用するZombie本体の基礎移動速度
+  pathfinder-base-movement-speed: 0.25
+  flee-radius: 10.0
+  move-step: 0.65
+  flee-step: 0.85
+  movement:
+    # 滑らかな操舵、障害物回避、Bot同士の分散、1ブロック段差の乗り越え
+    max-velocity: 0.28
+    step-to-velocity: 0.36
+    steering-smoothing: 0.42
+    separation-radius: 2.2
+    separation-strength: 0.8
+    shared-heart-penalty: 64.0
+    flee-strafe: 3.0
+    stuck-updates-before-jump: 3
+    # 0.5秒間隔でこの回数動けなければ、近くの安全な床へ復帰します。
+    stuck-updates-before-recovery: 12
+    jump-velocity: 0.42
+  # 全心臓破壊後、体力に余裕があり、味方が2体以上または鬼が弱っていれば討伐を狙います。
+  hunt-min-health-ratio: 0.60
+  hunt-min-allies: 2
+  hunt-oni-max-health-ratio: 0.50
+  hunt-step: 0.78
+  hunt-attack-range: 2.4
+  hunt-attack-damage: 4.0
+  hunt-attack-cooldown-ticks: 20
+  skill-check-success-chance: 0.78
+  skill-check-great-chance: 0.15
+  skill-check-reaction-seconds: 0.65
+  stamina-empty-step-multiplier: 0.55
+  passives:
+    # 臆病Botが鬼から逃げる際の移動補正
+    cowardice-flee-step-multiplier: 1.08
+    # 集中Botのスキルチェック成功率・グレイト率加算
+    focus-skill-check-bonus: 0.08
+    focus-great-bonus: 0.05
+  skills:
+    sprint-seconds: 5.0
+    sprint-step-multiplier: 1.45
+    smoke-range: 8.0
+    smoke-blindness-ticks: 60
+    strike-range: 4.0
+    strike-damage-sealed: 2.0
+    strike-damage-final: 12.0
+    obsession-range: 18.0
+    obsession-ticks: 160
+    heal-threshold: 0.65
+    heal-safe-distance: 9.0
+    heal-amount: 8.0
+    invisible-evasion-seconds: 4.0
+oni-terror-radius: 28.0
+oni-detection-range: 24.0
+oni-field-of-view: 110.0
+chase-lost-seconds: 8.0
+test-heart-target-range: 20
+final-phase-bgm:
+  enabled: true
+  sound: "onigame:final_phase"
+  volume: 0.8
+  pitch: 1.0
+  replay-seconds: 194

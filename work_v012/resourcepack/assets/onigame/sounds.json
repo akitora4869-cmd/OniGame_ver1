@@ -1,0 +1,10 @@
+{
+  "final_phase": {
+    "sounds": [
+      {
+        "name": "onigame:music/final_phase",
+        "stream": true
+      }
+    ]
+  }
+}
